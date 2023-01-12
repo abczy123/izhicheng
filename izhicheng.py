@@ -10,7 +10,7 @@ try:
     if os.environ.get('GITHUB_RUN_ID', None):
         sno_count = os.environ.get('students','').split('\n')
     else:
-        sno_count = ['212006165','林志圆','350000','350100','350121']
+        sno_count = ['212006165 林志圆 350000 350100 350121']
 except:
     print('配置环境出错')
 
@@ -77,7 +77,6 @@ for info in sno_count:
     Jsconfid_And_CallbackConfId = items[36]['listeners'][0]['action']
     JsConfId =  pattern.search(Jsconfid_And_CallbackConfId)[0]
     CallbackConfId = pattern.search(Jsconfid_And_CallbackConfId)[1]
-    print(Jsconfid_And_CallbackConfId)
 
 
     def post_form(JsConfId,CallbackConfId,now_time,cookie,sessionID,sno,name,sheng,shi,qu,txwz):
