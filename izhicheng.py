@@ -15,7 +15,6 @@ try:
             shi = student_info[1]
             qu = student_info[2]
             txwz = sheng+shi+qu
-            print(student_info)
     else:
         sno_count = ['212006165']
         sheng = '350000'
@@ -26,7 +25,6 @@ except:
     print('配置环境出错')
 
 for i in range(len(sno_count)):
-    print(sno_count)
     sno = sno_count[i]
     url = 'http://dw10.fdzcxy.edu.cn/datawarn/ReportServer?formlet=app/sjkrb.frm&op=h5&userno='+sno+'#/form'
     pattern = re.compile('([a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12})')
@@ -82,12 +80,10 @@ for i in range(len(sno_count)):
     items = source['items'][0]['el']['items']
     sno = items[1]['value']
     name = items[2]['value']
-    print(sno)
-    print(name)
     Jsconfid_And_CallbackConfId = items[36]['listeners'][0]['action']
     JsConfId =  pattern.search(Jsconfid_And_CallbackConfId)[0]
     CallbackConfId = pattern.search(Jsconfid_And_CallbackConfId)[1]
-
+    print(JsConfId)
 
 
     def post_form(JsConfId,CallbackConfId,now_time,cookie,sessionID,sno,name,sheng,shi,qu,txwz):
