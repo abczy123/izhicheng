@@ -35,7 +35,7 @@ for info in sno_count:
         'Cookie': 'JSESSIONID=CB299DDFB73B6CF66A2CC6FF2159E768',
         'deviceType': 'android',
         'Host': 'dw10.fdzcxy.edu.cn',
-        'Referer': 'http://dw10.fdzcxy.edu.cn/datawarn/ReportServer?formlet=app/sjkrb.frm&op=h5&userno=212006165',
+        'Referer': 'http://dw10.fdzcxy.edu.cn/datawarn/ReportServer?formlet=app/sjkrb.frm&op=h5&userno='+sno,
         'terminal': 'H5',
         'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Mobile Safari/537.36 Edg/108.0.1462.54',
     }
