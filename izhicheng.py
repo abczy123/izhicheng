@@ -11,12 +11,15 @@ try:
         sno_count = os.environ.get('students','').split('\n')
         for info in sno_count:
             student_info = info.split(' ')
-            sheng = student_info[0]
-            shi = student_info[1]
-            qu = student_info[2]
+            sno = student_info[0]
+            name = student_info[1]
+            sheng = student_info[2]
+            shi = student_info[3]
+            qu = student_info[4]
             txwz = sheng+shi+qu
     else:
         sno_count = ['212006165']
+        name = '林志圆'
         sheng = '350000'
         shi = '350100'
         qu ='350121'
@@ -78,8 +81,6 @@ for i in range(len(sno_count)):
     res = requests.get(url, headers=headers, params=params)
     source = res.json()
     items = source['items'][0]['el']['items']
-    sno = items[1]['value']
-    name = items[2]['value']
     Jsconfid_And_CallbackConfId = items[36]['listeners'][0]['action']
     JsConfId =  pattern.search(Jsconfid_And_CallbackConfId)[0]
     CallbackConfId = pattern.search(Jsconfid_And_CallbackConfId)[1]
