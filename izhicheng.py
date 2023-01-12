@@ -83,7 +83,7 @@ for i in range(len(sno_count)):
     Jsconfid_And_CallbackConfId = items[36]['listeners'][0]['action']
     JsConfId =  pattern.search(Jsconfid_And_CallbackConfId)[0]
     CallbackConfId = pattern.search(Jsconfid_And_CallbackConfId)[1]
-    print(JsConfId)
+    print(Jsconfid_And_CallbackConfId)
 
 
     def post_form(JsConfId,CallbackConfId,now_time,cookie,sessionID,sno,name,sheng,shi,qu,txwz):
