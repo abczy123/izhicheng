@@ -9,26 +9,19 @@ sno_count = []
 try:
     if os.environ.get('GITHUB_RUN_ID', None):
         sno_count = os.environ.get('students','').split('\n')
-        for info in sno_count:
-            student_info = info.split(' ')
-            sno = student_info[0]
-            name = student_info[1]
-            sheng = student_info[2]
-            shi = student_info[3]
-            qu = student_info[4]
-            txwz = sheng+shi+qu
     else:
-        sno_count = ['212006165']
-        name = '林志圆'
-        sheng = '350000'
-        shi = '350100'
-        qu ='350121'
-        txwz = '福建省福州市闽侯县'
+        sno_count = ['212006165','林志圆','350000','350100','350121']
 except:
     print('配置环境出错')
 
-for i in range(len(sno_count)):
-    sno = sno_count[i]
+for info in sno_count:
+    student_info = info.split(' ')
+    sno = student_info[0]
+    name = student_info[1]
+    sheng = student_info[2]
+    shi = student_info[3]
+    qu = student_info[4]
+    txwz = sheng+shi+qu if os.environ.get('GITHUB_RUN_ID', None) else '福建省福州市闽侯县'    
     url = 'http://dw10.fdzcxy.edu.cn/datawarn/ReportServer?formlet=app/sjkrb.frm&op=h5&userno='+sno+'#/form'
     pattern = re.compile('([a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12})')
     headers = {
