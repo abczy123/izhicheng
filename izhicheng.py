@@ -58,7 +58,7 @@ for i in range(len(sno_count)):
     #sessionID每次都会变化要取寻找sessionID再请求地址
 
 
-    #获取名字，JsconfId，CallbackConfId同上
+    #获取JsconfId，CallbackConfId同上
     params = {
         'op':
             'fr_form',
@@ -82,6 +82,8 @@ for i in range(len(sno_count)):
     items = source['items'][0]['el']['items']
     sno = items[1]['value']
     name = items[2]['value']
+    print(sno)
+    print(name)
     Jsconfid_And_CallbackConfId = items[36]['listeners'][0]['action']
     JsConfId =  pattern.search(Jsconfid_And_CallbackConfId)[0]
     CallbackConfId = pattern.search(Jsconfid_And_CallbackConfId)[1]
