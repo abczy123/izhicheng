@@ -1,4 +1,3 @@
-import csv
 import time
 import requests
 import re
@@ -10,18 +9,17 @@ try:
     if os.environ.get('GITHUB_RUN_ID', None):
         sno_count = os.environ.get('students','').split('\n')
     else:
-        sno_count = ['212006165 林志圆 350000 350100 350121']
+        sno_count = ['212006165 福建省 福州市 闽侯县']
 except:
     print('配置环境出错')
 
 for info in sno_count:
     student_info = info.split(' ')
     sno = student_info[0]
-    name = student_info[1]
-    sheng = student_info[2]
-    shi = student_info[3]
-    qu = student_info[4]
-    txwz = sheng+shi+qu if os.environ.get('GITHUB_RUN_ID', None) else '福建省福州市闽侯县'    
+    sheng = student_info[1]
+    shi = student_info[2]
+    qu = student_info[3]
+    txwz = sheng+shi+qu
     url = 'http://dw10.fdzcxy.edu.cn/datawarn/ReportServer?formlet=app/sjkrb.frm&op=h5&userno='+sno+'#/form'
     pattern = re.compile('([a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12})')
     headers = {
@@ -32,14 +30,12 @@ for info in sno_count:
         'Cache-Control': 'no-cache',
         'clientType': 'mobile/h5_5.0',
         'Connection': 'keep-alive',
-        'Cookie': 'JSESSIONID=CB299DDFB73B6CF66A2CC6FF2159E768',
         'deviceType': 'android',
         'Host': 'dw10.fdzcxy.edu.cn',
         'Referer': 'http://dw10.fdzcxy.edu.cn/datawarn/ReportServer?formlet=app/sjkrb.frm&op=h5&userno='+sno,
         'terminal': 'H5',
         'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Mobile Safari/537.36 Edg/108.0.1462.54',
     }
-
 
 
 
@@ -51,8 +47,7 @@ for info in sno_count:
     cookie = 'JSESSIONID=' + requests.utils.dict_from_cookiejar(res.cookies)['JSESSIONID']
     #sessionID每次都会变化要取寻找sessionID再请求地址
 
-
-    #获取JsconfId，CallbackConfId同上
+    #获取JsconfId，CallbackConfId,name同上
     params = {
         'op':
             'fr_form',
@@ -74,10 +69,10 @@ for info in sno_count:
     res = requests.get(url, headers=headers, params=params)
     source = res.json()
     items = source['items'][0]['el']['items']
+    name = items[2]['value']
     Jsconfid_And_CallbackConfId = items[36]['listeners'][0]['action']
     JsConfId =  pattern.search(Jsconfid_And_CallbackConfId)[0]
     CallbackConfId = pattern.search(Jsconfid_And_CallbackConfId)[1]
-
 
     def post_form(JsConfId,CallbackConfId,now_time,cookie,sessionID,sno,name,sheng,shi,qu,txwz):
         headers = {
@@ -99,22 +94,20 @@ for info in sno_count:
             'terminal': 'H5',
             'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Mobile Safari/537.36 Edg/108.0.1462.76'
         }
+        print(sheng,shi,qu,sno,name,txwz,now_time)
         data = {
             'op': 'dbcommit',
             '__parameters__': quote(
-            '{"jsConfId":' +JsConfId+', "callbackConfId":' +CallbackConfId+','
-             '"LABEL2": "  每日健康上报", "XH":'+ sno+', "XM":'+ name+', "LABEL12": "", "LABEL0": "1. 目前所在位置:", "SHENG":'+ sheng+','
-             '"SHI":'+ shi+', "QU":'+ qu+', "LABEL11": "2.填报时间:", "SJ":'+ now_time+','
-             '"LABEL1": "3. 今日体温是否正常？(体温小于37.3为正常)", "TWZC": "正常", "LABEL6": "目前体温为：", "TW": "0", "TXWZ":'+ txwz+','
-             '"LABEL9": "4. 昨日午检体温:", "WUJ": "36.4", "LABEL8": "5. 昨日晚检体温:", "WJ": "36.5", "LABEL10": "6. 今日晨检体温:",'
-             '"CJ": "36.4", "LABEL3": "7. 今日健康状况？", "JK": ["健康"], "JKZK": "", "QTB": "请输入具体症状：", "QT": " ",'
-            ' "LABEL4": "8. 近14日你和你的共同居住者(包括家庭成员、共同租住的人员)是否存在确诊、疑似、无症状新冠感染者？", "WTSQK": ["无以下特殊情况"], "SFXG": "",'
-             '"LABEL5": "9. 今日隔离情况？", "GLQK": "无需隔离", "LABEL7": "* 本人承诺以上所填报的内容全部真实，并愿意承担相应责任。", "CHECK": true,'
-            ' "WZXXXX": "2", "DWWZ": {}, "SUBMIT": "提交信息"}')
+            '{"jsConfId":"' + JsConfId + '","callbackConfId":"' + CallbackConfId + '","LABEL2":"  每日健康上报","XH":"' + sno + '","XM":"' + name + '","LABEL12":"",'
+            '"LABEL0":"1. 目前所在位置:","SHENG":"' + sheng + '","SHI":"' + shi + '","QU":"' + qu + '","LABEL11":"2.填报时间:",'
+            '"SJ":"' + now_time + '","LABEL1":"3. 今日体温是否正常？(体温小于37.3为正常)","TWZC":"正常","LABEL6":"目前体温为：","TW":"0",'
+            '"TXWZ":"' +txwz+ '","LABEL9":"4. 昨日午检体温:","WUJ":"36.4","LABEL8":"5. 昨日晚检体温:","WJ":"36.5","LABEL10":"6. 今日晨检体温:","CJ":"36.4","LABEL3":"7. 今日健康状况？","JK":["健康"],"JKZK":"",'
+            '"QTB":"请输入具体症状：","QT":" ","LABEL4":"8. 近14日你和你的共同居住者(包括家庭成员、共同租住的人员)是否存在确诊、疑似、无症状新冠感染者？","WTSQK":["无以下特殊情况"],'
+            '"SFXG":"","LABEL5":"9. 今日隔离情况？","GLQK":"无需隔离","LABEL7":"* 本人承诺以上所填报的内容全部真实，并愿意承担相应责任。","CHECK":true,"WZXXXX":"2","DWWZ":{},"SUBMIT":"提交信息"}')
         }
+        #""是对，与:操作的不是对汉字--> "," ":" 替换时候应注意保留 如填写位置那里
         url = 'http://dw10.fdzcxy.edu.cn/datawarn/decision/view/form'
         res = requests.post(url,headers = headers,data = data)
-
 
 
     try:
@@ -123,6 +116,3 @@ for info in sno_count:
         print('{0}你自动填报的时间是:{1}'.format(name,now_time))
     except:
         print("填报错误请再次试试")
-
-
-
