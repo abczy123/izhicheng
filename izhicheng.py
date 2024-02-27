@@ -9,7 +9,7 @@ try:
     if os.environ.get('GITHUB_RUN_ID', None):
         sno_count = os.environ.get('students','').split('\n')
     else:
-        sno_count = ['212006165 福建省 福州市 闽侯县 阳康']
+        sno_count = ['123456789 福建省 福州市 闽侯县 阳康']#这个项目现在被我转为公开版本了，为保护隐私我去除了我的学号
 except:
     print('配置环境出错')
 
